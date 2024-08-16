@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://sucl5b5bcrcj"]
+[gd_scene load_steps=4 format=3 uid="uid://sucl5b5bcrcj"]
 
 [ext_resource type="PackedScene" uid="uid://b6hqrio2sttt5" path="res://Assets/3d/Board.glb" id="1_wmkv3"]
 [ext_resource type="PackedScene" uid="uid://dp66bm607awtb" path="res://Assets/3d/Wheel.glb" id="2_7fcpy"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0h6yl"]
+size = Vector3(2.5, 1.75, 9.5)
 
 [node name="Board" type="Node3D"]
 
@@ -19,3 +22,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.01814, -0.258459, -2.342)
 
 [node name="Wheel5" parent="." instance=ExtResource("2_7fcpy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.018, -0.258821, -2.342)
+
+[node name="RigidBody3D" type="RigidBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25481, -0.000282288)
+shape = SubResource("BoxShape3D_0h6yl")
