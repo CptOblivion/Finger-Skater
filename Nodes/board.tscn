@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://sucl5b5bcrcj"]
+
+[ext_resource type="PackedScene" uid="uid://b6hqrio2sttt5" path="res://Assets/3d/Board.glb" id="1_wmkv3"]
+[ext_resource type="PackedScene" uid="uid://dp66bm607awtb" path="res://Assets/3d/Wheel.glb" id="2_7fcpy"]
+
+[node name="Board" type="Node3D"]
+
+[node name="Board2" parent="." instance=ExtResource("1_wmkv3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.393179, 0)
+
+[node name="Wheel2" parent="." instance=ExtResource("2_7fcpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.01814, -0.258459, 2.34172)
+
+[node name="Wheel3" parent="." instance=ExtResource("2_7fcpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.018, -0.258821, 2.342)
+
+[node name="Wheel4" parent="." instance=ExtResource("2_7fcpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.01814, -0.258459, -2.342)
+
+[node name="Wheel5" parent="." instance=ExtResource("2_7fcpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.018, -0.258821, -2.342)
