@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://cd5lo8o88mq7e"]
+[gd_scene load_steps=8 format=3 uid="uid://cd5lo8o88mq7e"]
 
 [ext_resource type="PackedScene" uid="uid://sucl5b5bcrcj" path="res://Nodes/board.tscn" id="1_f34tq"]
+[ext_resource type="PackedScene" uid="uid://bino3qnnmmp7v" path="res://Nodes/UI_main.tscn" id="2_sco4r"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_h4efm"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -34,7 +35,7 @@ shadow_enabled = true
 shape = SubResource("WorldBoundaryShape3D_e31ps")
 
 [node name="Board" parent="StaticBody3D" instance=ExtResource("1_f34tq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.201113, 7.83964, -1.83024)
+transform = Transform3D(0.965473, 0.260227, 0.0120398, -0.255581, 0.955157, -0.149513, -0.0504071, 0.141274, 0.988687, 0.201113, 4.67721, -1.83423)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
 transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0)
@@ -42,3 +43,5 @@ mesh = SubResource("PlaneMesh_flb45")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(0.648811, 0.307272, -0.696153, 0, 0.914847, 0.403801, 0.76095, -0.26199, 0.593563, -16.207, 13.7706, 12.7029)
+
+[node name="UiMain" parent="Camera3D" instance=ExtResource("2_sco4r")]
