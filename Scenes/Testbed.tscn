@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://cd5lo8o88mq7e"]
+[gd_scene load_steps=7 format=3 uid="uid://cd5lo8o88mq7e"]
 
 [ext_resource type="PackedScene" uid="uid://sucl5b5bcrcj" path="res://Nodes/board.tscn" id="1_f34tq"]
-[ext_resource type="PackedScene" uid="uid://bino3qnnmmp7v" path="res://Nodes/UI_main.tscn" id="2_sco4r"]
+[ext_resource type="PackedScene" uid="uid://ca33bpyukhxyw" path="res://Nodes/Ground_generic.tscn" id="1_jfgrb"]
+[ext_resource type="PackedScene" uid="uid://b5w0llr27iqnt" path="res://Nodes/Box_generic.tscn" id="2_cphdd"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_h4efm"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -16,32 +17,25 @@ sky = SubResource("Sky_omur6")
 tonemap_mode = 2
 glow_enabled = true
 
-[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_e31ps"]
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_flb45"]
-
 [node name="Testbed" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_1u4m6")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 4.87723, 16.8952, -8.4476)
+transform = Transform3D(-0.27322, -0.231676, 0.933636, -0.0850898, 0.972581, 0.21644, -0.958181, -0.0203074, -0.285441, 4.87723, 16.8952, -8.4476)
 shadow_enabled = true
 
-[node name="StaticBody3D" type="StaticBody3D" parent="."]
+[node name="Ground_generic" parent="." instance=ExtResource("1_jfgrb")]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
-shape = SubResource("WorldBoundaryShape3D_e31ps")
-
-[node name="Board" parent="StaticBody3D" instance=ExtResource("1_f34tq")]
+[node name="Board" parent="." instance=ExtResource("1_f34tq")]
 transform = Transform3D(0.965473, 0.260227, 0.0120398, -0.255581, 0.955157, -0.149513, -0.0504071, 0.141274, 0.988687, 0.201113, 4.67721, -1.83423)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
-transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0)
-mesh = SubResource("PlaneMesh_flb45")
+[node name="StaticBody3D" parent="." instance=ExtResource("2_cphdd")]
+transform = Transform3D(4.81156, 0, -1.35972, 0, 5, 0, 1.35972, 0, 4.81156, -22.9786, 2.41862, -7.88491)
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.648811, 0.307272, -0.696153, 0, 0.914847, 0.403801, 0.76095, -0.26199, 0.593563, -16.207, 13.7706, 12.7029)
+[node name="StaticBody3D2" parent="." instance=ExtResource("2_cphdd")]
+transform = Transform3D(4.97069, 0, 0.540604, 0, 5, 0, -0.540604, 0, 4.97069, 19.3767, 2.41862, 5.32117)
 
-[node name="UiMain" parent="Camera3D" instance=ExtResource("2_sco4r")]
+[node name="StaticBody3D3" parent="." instance=ExtResource("2_cphdd")]
+transform = Transform3D(2.33818, 0, -4.4196, 0, 5, 0, 4.4196, 0, 2.33818, 19.7885, 2.41862, -30.8923)

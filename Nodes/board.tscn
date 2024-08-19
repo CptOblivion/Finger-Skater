@@ -1,5 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://sucl5b5bcrcj"]
+[gd_scene load_steps=5 format=3 uid="uid://sucl5b5bcrcj"]
 
+[ext_resource type="Script" path="res://Scripts/Controls.gd" id="1_8840h"]
 [ext_resource type="PackedScene" uid="uid://b6hqrio2sttt5" path="res://Assets/3d/Board.glb" id="1_wmkv3"]
 [ext_resource type="PackedScene" uid="uid://dp66bm607awtb" path="res://Assets/3d/Wheel.glb" id="2_7fcpy"]
 
@@ -8,7 +9,40 @@ size = Vector3(2.5, 1.75, 9.5)
 
 [node name="Board" type="Node3D"]
 
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Forward" type="SubViewportContainer" parent="VBoxContainer"]
+clip_contents = true
+layout_mode = 2
+
+[node name="SubViewport" type="SubViewport" parent="VBoxContainer/Forward"]
+handle_input_locally = false
+size = Vector2i(720, 640)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="VBoxContainer/Forward/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 7.493, 0)
+
+[node name="Board" type="SubViewportContainer" parent="VBoxContainer"]
+clip_contents = true
+layout_mode = 2
+
+[node name="SubViewport" type="SubViewport" parent="VBoxContainer/Board"]
+handle_input_locally = false
+physics_object_picking = true
+size = Vector2i(720, 640)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="VBoxContainer/Board/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 7.493, 0)
+
 [node name="RigidBody3D" type="RigidBody3D" parent="."]
+script = ExtResource("1_8840h")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25481, -0.000282288)
@@ -17,14 +51,25 @@ shape = SubResource("BoxShape3D_0h6yl")
 [node name="Board" parent="RigidBody3D" instance=ExtResource("1_wmkv3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.393179, 0)
 
-[node name="WheelBR" parent="RigidBody3D" instance=ExtResource("2_7fcpy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.01814, -0.258459, 2.34172)
-
-[node name="WheelBL" parent="RigidBody3D" instance=ExtResource("2_7fcpy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.018, -0.258821, 2.342)
+[node name="WheelFL" parent="RigidBody3D" instance=ExtResource("2_7fcpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.018, -0.258821, -2.342)
 
 [node name="WheelFR" parent="RigidBody3D" instance=ExtResource("2_7fcpy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.01814, -0.258459, -2.342)
 
-[node name="WheelFL" parent="RigidBody3D" instance=ExtResource("2_7fcpy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.018, -0.258821, -2.342)
+[node name="WheelBL" parent="RigidBody3D" instance=ExtResource("2_7fcpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.018, -0.258821, 2.342)
+
+[node name="WheelBR" parent="RigidBody3D" instance=ExtResource("2_7fcpy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.01814, -0.258459, 2.34172)
+
+[node name="camera positions" type="Node3D" parent="RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.493, 0)
+
+[node name="Remote-board" type="RemoteTransform3D" parent="RigidBody3D/camera positions"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+remote_path = NodePath("../../../VBoxContainer/Board/SubViewport/Camera3D")
+
+[node name="Remote-forward" type="RemoteTransform3D" parent="RigidBody3D/camera positions"]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 0, 0)
+remote_path = NodePath("../../../VBoxContainer/Forward/SubViewport/Camera3D")
