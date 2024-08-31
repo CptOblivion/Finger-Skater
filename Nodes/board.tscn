@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://sucl5b5bcrcj"]
 
-[ext_resource type="Script" path="res://Scripts/Controls.gd" id="1_8840h"]
-[ext_resource type="PackedScene" uid="uid://b6hqrio2sttt5" path="res://Assets/3d/Board.glb" id="1_wmkv3"]
-[ext_resource type="PackedScene" uid="uid://dp66bm607awtb" path="res://Assets/3d/Wheel.glb" id="2_7fcpy"]
+[ext_resource type="Script" path="res://Scripts/controls.gd" id="1_8840h"]
+[ext_resource type="PackedScene" uid="uid://b6hqrio2sttt5" path="res://Assets/3d/board.glb" id="1_wmkv3"]
+[ext_resource type="PackedScene" uid="uid://dp66bm607awtb" path="res://Assets/3d/wheel.glb" id="2_7fcpy"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0h6yl"]
 size = Vector3(2.5, 1.75, 9.5)
@@ -44,6 +44,8 @@ offset_left = 280.0
 offset_top = 15.0
 offset_right = -280.0
 offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 2
 pivot_offset = Vector2(80, 305)
 script = ExtResource("1_8840h")
 
