@@ -1,29 +1,64 @@
-extends CollisionObject3D
+class_name BoardControl
+extends Control
 
-var push_power = 10
-var drag = 5
+var parent: BoardControl = null
+# TODO: only render these on parent
+@export var use_mouse: bool = false
+@export var push_power: float = 10
+@export var drag: float = 5
+
 var on_board = false
 
 
+
+const diag = asin(PI/8)
+const directions = [
+	["↖️","⬆️","↗️"],
+	["⬅️","🛑","➡️"],
+	["↙️","⬇️","↘️"]]
+
 # Called when the node enters the scene tree for the first time.
-#func _ready() -> void:
-	#pass # Replace with function body.
-#
-#
-## Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta: float) -> void:
-	#pass
+func _ready() -> void:
+	#print(self.name, " ready")
+	var p = get_parent()
+	if (p is BoardControl):
+		parent = p
+	pass # Replace with function body.
 
-func _input_event(_camera: Camera3D, event: InputEvent, _event_position: Vector3, _normal: Vector3, _shape_idx: int) -> void:
-	handleEvent(event)
+func _gui_input(event: InputEvent) -> void:
+	handleEvent(event, self)
 
-func handleEvent(event: InputEvent) -> void:
+func _get_direction(direction: Vector2) -> String:
+	direction = direction.normalized()
+	var row = directions[1]
+	if (direction.y < -diag): row = directions[0]
+	elif  (direction.y > diag): row = directions[2]
+	
+	if (direction.x < -diag): return row[0]
+	elif (direction.x > diag): return row[2]
+	return row[1]
+	
+func _print_debug(val: String, calledBy: BoardControl) -> void:
+	print(calledBy.name, " | ", val)
+
+func handleEvent(event: InputEvent, calledBy: BoardControl) -> void:
+	# capture event and bubble up to root
+	if (parent != null):
+		parent.handleEvent(event, calledBy)
+		return
+	
 	if event is InputEventScreenTouch:
+		if (use_mouse):
+			return
 		# track which finger was touched (event index)
 		# TODO: figure out how to handle lift events that happened after finger left board (collider doesn't recieve touch ended event)
 		# TODO: consider just tracking all touches on bottom half of screen uniformly, no raycast into scene and board-specific touch handler
-		print("touch:", event)
+		#print(self.name, "touch: ", event)
+		_print_debug(str("touch: ", event.index, " ", event.pressed), calledBy)
 	elif event is InputEventScreenDrag:
+		if (use_mouse):
+			return
+		_print_debug(str("drag: ", event.index, " ", _get_direction(event.velocity)), calledBy)
 		# drags on board are steering:
 			# with one touch
 				# get vector from center of screen to touch
@@ -41,11 +76,14 @@ func handleEvent(event: InputEvent) -> void:
 				# if velocity passes some threshold, begin detecting swipe
 				# if velocity and direction are maintained and match a valid swipe, go into trick (ollie, kickflip, etc)
 		pass
-		#print("drag:", event)
-	#elif event is InputEventMouseButton:
-		#pass
-	#elif event is InputEventMouseMotion:
-		#pass
+	elif event is InputEventMouseButton:
+		if (!use_mouse):
+			return
+		_print_debug(str("click: ", event.pressed), calledBy)
+	elif event is InputEventMouseMotion:
+		if (!use_mouse):
+			return
+		_print_debug(str("mouse move: ", _get_direction(event.velocity)), calledBy)
 	else:
-		print("unhandled event type:", event.get_class())
+		_print_debug(str("unhandled event type: ", event.get_class()), calledBy)
 	
