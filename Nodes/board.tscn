@@ -34,6 +34,7 @@ clip_contents = true
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("1_8840h")
+path_to_board = NodePath("../../RigidBody3D")
 
 [node name="BoardButton" type="Control" parent="VBoxContainer/BoardScreen"]
 layout_mode = 1

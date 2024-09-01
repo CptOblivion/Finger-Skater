@@ -1,16 +1,20 @@
 class_name BoardControl
 extends Control
 
+
 var _parent: BoardControl = null
 var _use_mouse: bool = false
 var _mouse_down: bool = false
 
 # TODO: only render these on parent
+@export var path_to_board: NodePath
 @export var push_power: float = 10
 @export var drag: float = 5
 
 var on_board = false
 
+
+#should we use _init instead?
 func _ready() -> void:
 	var p = get_parent()
 	if p is BoardControl:
@@ -19,6 +23,9 @@ func _ready() -> void:
 	
 	if !DisplayServer.is_touchscreen_available():
 		_use_mouse = true
+	
+	
+
 
 func _handleEvent(event: InputEvent) -> void:
 	# capture event and bubble up to root
@@ -49,7 +56,8 @@ func _handleEvent(event: InputEvent) -> void:
 
 func _handle_touch():
 	pass
-	
+
+
 
 func _gui_input(event: InputEvent) -> void:
 	event.called_by = self
