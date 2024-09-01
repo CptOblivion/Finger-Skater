@@ -35,7 +35,6 @@ clip_contents = true
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("1_8840h")
-push_power = 0.07
 
 [node name="BoardButton" type="Control" parent="VBoxContainer/BoardScreen"]
 layout_mode = 1

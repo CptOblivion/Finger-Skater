@@ -2,15 +2,14 @@ class_name BoardControl
 extends Control
 
 
+# TODO: only render these on parent
+@export var push_power: float = 1.00
+@export var drag: float = 5
+
 var _parent: BoardControl = null
 var _use_mouse: bool = false
 var _mouse_down: bool = false
-
-# TODO: only render these on parent
-@export var path_to_board: NodePath
-@export var push_power: float = 10
-@export var drag: float = 5
-
+var _last_touch = [Vector2.ZERO, Vector2.ZERO]
 var on_board = false
 
 
@@ -23,43 +22,48 @@ func _ready() -> void:
 	
 	if !DisplayServer.is_touchscreen_available():
 		_use_mouse = true
-	
-	
 
 
-func _handleEvent(event: InputEvent) -> void:
+func _handleEvent(wrapper: EventWrapper) -> void:
 	# capture event and bubble up to root
 	if _parent != null:
-		_parent._handleEvent(event)
+		_parent._handleEvent(wrapper)
 		return
 	
-	if event is InputEventScreenTouch:
-		if _use_mouse:
+	if wrapper.event is InputEventScreenTouch or wrapper.event is InputEventScreenDrag:
+		wrapper.is_mouse = false
+	elif wrapper.event is InputEventMouseButton:
+		if !_use_mouse or wrapper.event.button_index != 1:
 			return
-		Printer.print_debug(str("touch: ", event.index, " ", event.pressed), event.called_by)
-	elif event is InputEventScreenDrag:
-		if _use_mouse:
+		wrapper.is_mouse = true
+		_mouse_down = wrapper.event.pressed
+		wrapper.convert_mouse_to_touch()
+	elif wrapper.event is InputEventMouseMotion:
+		if !_mouse_down:
 			return
-		Printer.print_debug(str("drag: ", event.index, " ", Printer.get_direction(event.velocity)), event.called_by)
-		pass
-	elif event is InputEventMouseButton:
-		if !_use_mouse || event.button_index != 1:
-			return
-		_mouse_down = event.pressed
-		Printer.print_debug(str("click"), event.called_by)
-	elif event is InputEventMouseMotion:
-		if !_use_mouse:
-			return
-		Printer.print_debug(str("mouse move: ", Printer.get_direction(event.velocity)), event.called_by)
-	else:
-		Printer.print_debug(str("unhandled event type: ", event.get_class()), event.called_by)
+		wrapper.is_mouse = true
+		wrapper.convert_mouse_to_touch()
+	_handle_touch(wrapper)
 
-func _handle_touch():
-	pass
 
+func _handle_touch(wrapper: EventWrapper):
+	if _use_mouse != wrapper.is_mouse:
+		return
+	if wrapper.event is InputEventMouseButton:
+		_mouse_down = wrapper.event.pressed
+	
+	if wrapper.event is InputEventScreenTouch:
+		if wrapper.event.pressed:
+			Printer.print_debug("click", wrapper.called_by)
+			_last_touch[wrapper.event.index] = wrapper.event.position
+		else:
+			Board.set_speed(0)
+	if wrapper.event is InputEventScreenDrag:
+		if !wrapper.on_board:
+			var thrust = wrapper.event.velocity.y * push_power
+			Board.set_speed(thrust)
+		_last_touch[wrapper.event.index] = wrapper.event.position
 
 
 func _gui_input(event: InputEvent) -> void:
-	event.called_by = self
-	event.onBoard == _parent != null
-	_handleEvent(event)
+	_handleEvent(EventWrapper.new(event, self, _parent != null))
